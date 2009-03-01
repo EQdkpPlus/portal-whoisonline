@@ -83,8 +83,8 @@ if(!function_exists(whoisonline_module))
   	
     // get all online users
     $sql = 'SELECT u.user_id, u.username, u.user_lastvisit
-            FROM `'.SESSIONS_TABLE.'` s
-            LEFT JOIN `'.USERS_TABLE.'` u
+            FROM __sessions s
+            LEFT JOIN __users u
             ON u.user_id=s.session_user_id
             GROUP BY u.username
             ORDER BY u.user_lastvisit DESC
@@ -142,7 +142,7 @@ if(!function_exists(whoisonline_module))
         // some users are missing, fill with last online users
         // get last active users (2x limit for ensuring enough users
       	$sql = 'SELECT user_id, username, user_lastvisit
-      	        FROM `'.USERS_TABLE.'`
+      	        FROM __users
                 GROUP BY username
                 ORDER BY user_lastvisit DESC
                 LIMIT 0,'.(2 * $limit);
