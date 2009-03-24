@@ -12,7 +12,7 @@
  * @link        http://eqdkp-plus.com
  * @package     eqdkp-plus
  * @version     $Rev:  $
- * 
+ *
  * $Id: $
  */
 
@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 $portal_module['whoisonline'] = array(                     // the same name as the folder!
 			'name'			    => 'Online Module',                  // The name to show
 			'path'			    => 'whoisonline',                    // Folder name again
-			'version'		    => '0.0.1',                          // Version
+			'version'		    => '0.0.2',                          // Version
 			'author'        	=> 'Aderyn',                         // Author
 			'contact'		    => 'Aderyn@gmx.net',                 // email adress
 			'description'   	=> 'Show online users',              // Detailed Description
@@ -61,7 +61,7 @@ $portal_settings['whoisonline'] = array(
         'property'  => 'checkbox',
         'size'      => false,
         'options'   => false,
-      )   
+      )
 );
 
 // The output function
@@ -71,16 +71,16 @@ if(!function_exists(whoisonline_module))
   function whoisonline_module()
   {
   	global $eqdkp, $db, $plang, $conf_plus, $eqdkp_root_path, $html, $SID, $user;
-  	
+
   	// header
   	$whoisonline = '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
-  	
+
   	// limit of users
     $limit = ($conf_plus['wo_limit'] ? $conf_plus['wo_limit'] : 10);
-  	
+
   	// image path
   	$img_path = $eqdkp_root_path.'/images/glyphs';
-  	
+
     // get all online users
     $sql = 'SELECT u.user_id, u.username, u.user_lastvisit
             FROM __sessions s
@@ -94,7 +94,7 @@ if(!function_exists(whoisonline_module))
     {
       $online_users = array();
       $merged_users = array();
-      
+
       // get the number of users
       $online_user_count = $db->sql_numrows($result);
       // fetch users
@@ -108,15 +108,15 @@ if(!function_exists(whoisonline_module))
         }
       }
       $db->sql_freeresult($result);
-      
+
       // get the number of users
       $online_user_count = count($online_users);
-      
+
       // output
       foreach ($online_users as $user_row)
       {
         $class = $eqdkp->switch_row_class();
-        
+
         // create username, if admin right, make link to manage users
         if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('a_users_man', false))
         {
@@ -126,7 +126,7 @@ if(!function_exists(whoisonline_module))
         {
           $username = $user_row['username'];
         }
-        
+
         // show as online
         $whoisonline .= '<tr class="'.$class.'" onmouseover="this.className=\'rowHover\';" onmouseout="this.className=\''.$class.'\'" >
                            <td align=center><img src="'.$img_path.'/status_green.gif"/></td>
@@ -135,7 +135,7 @@ if(!function_exists(whoisonline_module))
         					.'</td>
                          </tr>';
       }
-      
+
       // enough online users?
       if ($online_user_count < $limit)
       {
@@ -150,7 +150,7 @@ if(!function_exists(whoisonline_module))
         if ($result)
         {
           $offline_users = array();
-      
+
           // get the number of offline users
           $offline_user_count = $db->sql_numrows($result);
           // fetch users
@@ -161,7 +161,7 @@ if(!function_exists(whoisonline_module))
                                                     'id'        => $row['user_id']);
           }
           $db->sql_freeresult($result);
-          
+
           // merge users
           foreach ($offline_users as $user_row)
           {
@@ -170,15 +170,15 @@ if(!function_exists(whoisonline_module))
               $merged_users[] = $user_row;
             }
           }
-          
-         
-          if (!$conf_plus['wo_dontshowoffline']) 
+
+
+          if (!$conf_plus['wo_dontshowoffline'])
           {
 	          $user_limit = min(count($merged_users), $limit - $online_user_count);
 	          for ($i = 0; $i < $user_limit; $i++)
 	          {
 	            $class = $eqdkp->switch_row_class();
-	            
+
 	            // create username, if admin right, make link to manage users
 	            if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('a_users_man', false))
 	            {
@@ -188,22 +188,22 @@ if(!function_exists(whoisonline_module))
 	            {
 	              $username = $merged_users[$i]['username'];
 	            }
-	            
+
 	            // show as offline
 	            $whoisonline .= '<tr class="'.$class.'" onmouseover="this.className=\'rowHover\';" onmouseout="this.className=\''.$class.'\'" >
 	                               <td align=center><img src="'.$img_path.'/status_red.gif"/></td>
 	                               <td>'.$html->ToolTip($plang['wo_last_online'].date($plang['wo_date_format'],$merged_users[$i]['lastvisit']), $username).'</td>
 	                             </tr>';
-	          }          	          
+	          }
           }
 
         }
       }
     }
-  	
+
   	// footer
   	$whoisonline .= '</table>';
-  	
+
     // return the output for module manager
 		return $whoisonline;
   }
