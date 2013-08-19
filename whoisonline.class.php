@@ -61,7 +61,7 @@ if (!class_exists('mmo_whoisonline'))
       $this->limit = ($this->config->get('wo_limit') && $this->config->get('wo_limit') != '') ? $this->config->get('wo_limit') : 10;
 
       // get image path
-      $this->image_path = $this->root_path.'images/glyphs';
+      $this->image_path = $this->server_path.'images/glyphs';
 
       // get is admin
       $this->is_admin = ($this->user->is_signedin() && $this->user->check_auth('a_users_man', false)) ? true : false;
@@ -92,7 +92,7 @@ if (!class_exists('mmo_whoisonline'))
       foreach ($this->online_users as $user_row){
         // show as online
         $output .= '<div class="tr">
-                      <div class="td center"><img src="'.$this->image_path.'/status_green.gif" alt="online" /></div>
+                      <div class="td center"><img src="'.$this->image_path.'/status_green.png" alt="online" /></div>
                       <div class="td">'.$this->html->ToolTip($this->user->lang('wo_online'), $this->getUsername($user_row)).'</div>
                     </div>';
       }
@@ -109,7 +109,7 @@ if (!class_exists('mmo_whoisonline'))
 
           // show as offline
           $output .= '<div class="tr">
-                        <div class="td center"><img src="'.$this->image_path.'/status_red.gif" alt="offline"/></div>
+                        <div class="td center"><img src="'.$this->image_path.'/status_red.png" alt="offline"/></div>
                         <div class="td">'.$this->html->ToolTip($this->user->lang('wo_last_online').'<br/>'.$this->time->date($this->user->lang('wo_date_format'), $user_row['lastvisit']), $this->getUsername($user_row)).'</div>
                       </div>';
         }
@@ -132,11 +132,8 @@ if (!class_exists('mmo_whoisonline'))
     private function getUsername($user_row){
       if (!is_array($user_row))
         return '';
-
-      if ($this->is_admin)
-        return '<a href="'.$this->root_path.'admin/manage_users.php'.$this->SID.'&amp;u='.$user_row['user_id'].'">'.$user_row['username'].'</a>';
-      else
-        return '<a href="'.$this->root_path.'listusers.php'.$this->SID.'&amp;u='.$user_row['user_id'].'">'.$user_row['username'].'</a>';
+		
+		return '<a href="'.register('routing')->build('user', $user_row['username'], 'u'.$user_row['user_id']).'">'.$user_row['username'].'</a>';
     }
 
     /**
@@ -229,6 +226,4 @@ if (!class_exists('mmo_whoisonline'))
     }
   }
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_mmo_whoisonline', mmo_whoisonline::$shortcuts);
 ?>

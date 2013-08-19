@@ -67,5 +67,4 @@ class whoisonline_portal extends portal_generic {
 		$this->pdc->del('portal.module.whoisonline.offline');
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_whoisonline_portal', whoisonline_portal::__shortcuts());
 ?>
