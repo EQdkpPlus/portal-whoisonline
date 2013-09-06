@@ -29,7 +29,7 @@ if (!class_exists('mmo_whoisonline'))
   class mmo_whoisonline extends gen_class
   {
     /* list of dependencies */
-    public static $shortcuts = array('core', 'db', 'pdc', 'user', 'time', 'html', 'config');
+    public static $shortcuts = array('core', 'db', 'pdc', 'user', 'time', 'html', 'config', 'db2');
 
     /* Array of online users */
     private $online_users = array();
@@ -150,32 +150,29 @@ if (!class_exists('mmo_whoisonline'))
         $this->online_users = array();
 
         // get all online users
-        $sql = 'SELECT u.user_id, u.username, u.user_lastvisit
+        $sql = "SELECT u.user_id, u.username, u.user_lastvisit
                 FROM __sessions s
                 LEFT JOIN __users u
                 ON u.user_id = s.session_user_id
-                WHERE u.user_active = \'1\'
+                WHERE u.user_active = '1'
                 GROUP BY u.username
-                ORDER BY u.user_lastvisit DESC
-                LIMIT 0,'.$this->limit;
-        $result = $this->db->query($sql);
-        if ($result)
+                ORDER BY u.user_lastvisit DESC";
+        $objResult = $this->db2->prepare($sql)->limit($this->limit)->execute();
+        if ($objResult)
         {
           // fetch users
-          while ($row = $this->db->fetch_record($result))
+          while ($objResult->fetchAssoc())
           {
             // for some unknown reason, there is sometimes an empty user id
-            if ($row['user_id'])
+            if ($objResult->user_id != "")
             {
-              $this->online_users[$row['user_id']] = array(
-                  'user_id'   => $row['user_id'],
-                  'username'  => $row['username'],
-                  'lastvisit' => $row['user_lastvisit']
+              $this->online_users[$objResult->user_id] = array(
+                  'user_id'   => $objResult->user_id,
+                  'username'  => $objResult->username,
+                  'lastvisit' => $objResult->user_lastvisit,
               );
             }
           }
-          $this->db->free_result($result);
-
           // cache result
           $this->pdc->put('portal.module.whoisonline.online', $this->online_users, $this->cachetime, false, true);
         }
@@ -195,25 +192,25 @@ if (!class_exists('mmo_whoisonline'))
         $this->offline_users = array();
 
         // get last active users (2x limit for ensuring enough users)
-        $sql = 'SELECT user_id, username, user_lastvisit
+        $sql = "SELECT user_id, username, user_lastvisit
                 FROM __users
-                WHERE user_active = \'1\'
+                WHERE user_active = '1'
                 GROUP BY username
-                ORDER BY user_lastvisit DESC
-                LIMIT 0,'.(2 * $this->limit);
-        $result = $this->db->query($sql);
-        if ($result)
+                ORDER BY user_lastvisit DESC";
+        
+        $objResult = $this->db2->prepare($sql)->limit(2 * $this->limit)->execute();
+        
+        if ($objResult)
         {
           // fetch users
-          while ($row = $this->db->fetch_record($result))
+          while ($objResult->fetchAssoc())
           {
-            $this->offline_users[$row['user_id']] = array(
-                'user_id'   => $row['user_id'],
-                'username'  => $row['username'],
-                'lastvisit' => $row['user_lastvisit']
+            $this->offline_users[$objResult->user_id] = array(
+                'user_id'   => $objResult->user_id,
+                'username'  => $objResult->username,
+                'lastvisit' => $objResult->user_lastvisit,
             );
           }
-          $this->db->free_result($result);
 
           // build difference from online to offline users
           if (is_array($this->online_users))
