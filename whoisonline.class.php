@@ -29,7 +29,7 @@ if (!class_exists('mmo_whoisonline'))
   class mmo_whoisonline extends gen_class
   {
     /* list of dependencies */
-    public static $shortcuts = array('core', 'db', 'pdc', 'user', 'time', 'html', 'config', 'db2');
+    public static $shortcuts = array('core', 'db', 'pdc', 'user', 'time', 'html', 'config', 'db');
 
     /* Array of online users */
     private $online_users = array();
@@ -157,7 +157,7 @@ if (!class_exists('mmo_whoisonline'))
                 WHERE u.user_active = '1'
                 GROUP BY u.username
                 ORDER BY u.user_lastvisit DESC";
-        $objResult = $this->db2->prepare($sql)->limit($this->limit)->execute();
+        $objResult = $this->db->prepare($sql)->limit($this->limit)->execute();
         if ($objResult)
         {
           // fetch users
@@ -198,7 +198,7 @@ if (!class_exists('mmo_whoisonline'))
                 GROUP BY username
                 ORDER BY user_lastvisit DESC";
         
-        $objResult = $this->db2->prepare($sql)->limit(2 * $this->limit)->execute();
+        $objResult = $this->db->prepare($sql)->limit(2 * $this->limit)->execute();
         
         if ($objResult)
         {
