@@ -92,7 +92,7 @@ if (!class_exists('mmo_whoisonline'))
       foreach ($this->online_users as $user_row){
         // show as online
         $output .= '<div class="tr">
-                      <div class="td center"><img src="'.$this->image_path.'/status_green.png" alt="online" /></div>
+                      <div class="td center"><i class="eqdkp-icon-online" style="font-size: 10px;"></i></div>
                       <div class="td">'.$this->html->ToolTip($this->user->lang('wo_online'), $this->getUsername($user_row)).'</div>
                     </div>';
       }
@@ -109,7 +109,7 @@ if (!class_exists('mmo_whoisonline'))
 
           // show as offline
           $output .= '<div class="tr">
-                        <div class="td center"><img src="'.$this->image_path.'/status_red.png" alt="offline"/></div>
+                        <div class="td center"><i class="eqdkp-icon-offline" style="font-size: 10px;"></i></div>
                         <div class="td">'.$this->html->ToolTip($this->user->lang('wo_last_online').'<br/>'.$this->time->date($this->user->lang('wo_date_format'), $user_row['lastvisit']), $this->getUsername($user_row)).'</div>
                       </div>';
         }
