@@ -31,6 +31,7 @@ class whoisonline_portal extends portal_generic {
 		'name'			=> 'Online Module',
 		'version'		=> '0.1.0',
 		'author'		=> 'Aderyn',
+		'icon'			=> 'fa-globe',
 		'contact'		=> 'Aderyn@gmx.net',
 		'description'	=> 'Show online users',
 	);
