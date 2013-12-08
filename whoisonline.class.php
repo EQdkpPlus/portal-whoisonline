@@ -58,7 +58,7 @@ if (!class_exists('mmo_whoisonline'))
     public function __construct($wherevalue){
 
       // limit of users
-      $this->limit = ($this->config->get('wo_limit') && $this->config->get('wo_limit') != '') ? $this->config->get('wo_limit') : 10;
+      $this->limit = ($this->config('limit') && $this->config('limit') != '') ? $this->config('limit') : 10;
 
       // get image path
       $this->image_path = $this->server_path.'images/glyphs';
@@ -69,7 +69,7 @@ if (!class_exists('mmo_whoisonline'))
       // load online users
       $this->loadOnlineUsers();
       // load offline users if enabled
-      if (!$this->config->get('wo_dontshowoffline'))
+      if (!$this->config('dontshowoffline'))
         $this->loadOfflineUsers();
     }
 
@@ -98,7 +98,7 @@ if (!class_exists('mmo_whoisonline'))
       }
 
       // output offline users
-      if ($offline_user_count > 0 && !$this->config->get('wo_dontshowoffline'))
+      if ($offline_user_count > 0 && !$this->config('dontshowoffline'))
       {
         $index = 0;
         foreach ($this->offline_users as $user_id => $user_row)

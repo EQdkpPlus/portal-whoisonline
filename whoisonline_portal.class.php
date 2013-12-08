@@ -21,37 +21,30 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class whoisonline_portal extends portal_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('pdc');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
-	protected $path		= 'whoisonline';
-	protected $data		= array(
+	protected static $path		= 'whoisonline';
+	protected static $data		= array(
 		'name'			=> 'Online Module',
 		'version'		=> '0.1.0',
 		'author'		=> 'Aderyn',
 		'icon'			=> 'fa-globe',
 		'contact'		=> 'Aderyn@gmx.net',
 		'description'	=> 'Show online users',
+		'lang_prefix'	=> 'whoisonline_'
 	);
-	protected $positions = array('left1', 'left2', 'right');
+	protected static $positions = array('left1', 'left2', 'right');
 	protected $settings	= array(
-		'pk_whoisonline_limit'     => array(
-			'name'		=> 'wo_limit',
-			'language'	=> 'wo_limit',
-			'property'	=> 'text',
+		'limit'     => array(
+			'type'		=> 'text',
 			'size'		=> '2',
 		),
-		'pk_whoisonline_dontshowoffline'     => array(
-			'name'		=> 'wo_dontshowoffline',
-			'language'	=> 'wo_dontshowoffline',
-			'property'	=> 'checkbox',
+		'dontshowoffline'     => array(
+			'type'		=> 'checkbox',
 			'size'		=> false,
 			'options'	=> false,
 		)
 	);
-	protected $install	= array(
+	protected static $install	= array(
 		'autoenable'		=> '0',
 		'defaultposition'	=> 'left2',
 		'defaultnumber'		=> '2',

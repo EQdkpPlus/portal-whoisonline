@@ -26,8 +26,8 @@ $lang['whoisonline_name']			= 'User Online';
 $lang['whoisonline_desc']			= 'Anzeige für Online/Offline Benutzer';
 
 //  Settings
-$lang['wo_limit']					= 'Maximale Anzahl an Benutzern.';
-$lang['wo_dontshowoffline']			= 'Offline User nicht anzeigen.';
+$lang['whoisonline_limit']			= 'Maximale Anzahl an Benutzern.';
+$lang['whoisonline_dontshowoffline']= 'Offline User nicht anzeigen.';
 
 // Portal Modul
 $lang['wo_online']					= 'User Online';
