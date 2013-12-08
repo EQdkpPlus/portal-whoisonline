@@ -39,7 +39,7 @@ class whoisonline_portal extends portal_generic {
 			'size'		=> '2',
 		),
 		'dontshowoffline'     => array(
-			'type'		=> 'checkbox',
+			'type'		=> 'radio',
 			'size'		=> false,
 			'options'	=> false,
 		)
