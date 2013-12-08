@@ -56,9 +56,9 @@ class whoisonline_portal extends portal_generic {
 		return $class->getPortalOutput();
 	}
 
-	public function reset() {
-		$this->pdc->del('portal.module.whoisonline.online'); 
-		$this->pdc->del('portal.module.whoisonline.offline');
+	public static function reset() {
+		register('pdc')->del('portal.module.whoisonline.online'); 
+		register('pdc')->del('portal.module.whoisonline.offline');
 	}
 }
 ?>
