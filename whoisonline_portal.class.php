@@ -48,6 +48,13 @@ class whoisonline_portal extends portal_generic {
 			'property'	=> 'checkbox',
 			'size'		=> false,
 			'options'	=> false,
+		),
+		'pk_whoisonline_adminlink'     => array(
+			'name'		=> 'wo_adminlink',
+			'language'	=> 'wo_adminlink',
+			'property'	=> 'checkbox',
+			'size'		=> false,
+			'options'	=> false,
 		)
 	);
 	protected $install	= array(

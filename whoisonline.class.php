@@ -64,7 +64,8 @@ if (!class_exists('mmo_whoisonline'))
       $this->image_path = $this->root_path.'images/glyphs';
 
       // get is admin
-      $this->is_admin = ($this->user->is_signedin() && $this->user->check_auth('a_users_man', false)) ? true : false;
+	  $this->adminlink	= ($this->config->get('wo_adminlink') == '1') ? true : false;
+      $this->is_admin	= ($this->user->is_signedin() && $this->user->check_auth('a_users_man', false)) ? true : false;
 
       // load online users
       $this->loadOnlineUsers();
@@ -133,7 +134,7 @@ if (!class_exists('mmo_whoisonline'))
       if (!is_array($user_row))
         return '';
 
-      if ($this->is_admin)
+      if ($this->is_admin && $this->adminlink)
         return '<a href="'.$this->root_path.'admin/manage_users.php'.$this->SID.'&amp;u='.$user_row['user_id'].'">'.$user_row['username'].'</a>';
       else
         return '<a href="'.$this->root_path.'listusers.php'.$this->SID.'&amp;u='.$user_row['user_id'].'">'.$user_row['username'].'</a>';
