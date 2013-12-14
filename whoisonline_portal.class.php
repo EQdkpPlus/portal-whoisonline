@@ -52,7 +52,7 @@ class whoisonline_portal extends portal_generic {
 
 	public function output() {
 		include_once($this->root_path.'portal/whoisonline/whoisonline.class.php');
-		$class = registry::register('mmo_whoisonline', array(''));
+		$class = registry::register('mmo_whoisonline', array($this->id));
 		return $class->getPortalOutput();
 	}
 

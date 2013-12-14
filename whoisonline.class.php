@@ -48,17 +48,19 @@ if (!class_exists('mmo_whoisonline'))
 
     /* is admin to manage? */
     private $is_admin;
+	
+	private $showOffline = false;
 
 
     /**
      * Constructor
      *
-     * @param  $wherevalue  string  position of portal module
+     * @param  $id  integer ModuleID
      */
-    public function __construct($wherevalue){
+    public function __construct($moduleID){
 
       // limit of users
-      $this->limit = ($this->config('limit') && $this->config('limit') != '') ? $this->config('limit') : 10;
+      $this->limit = ($this->config->get('limit', 'pmod'.$moduleID) && $this->config->get('limit', 'pmod'.$moduleID) != '') ? (int)$this->config->get('limit', 'pmod'.$moduleID) : 10;
 
       // get image path
       $this->image_path = $this->server_path.'images/glyphs';
@@ -69,8 +71,10 @@ if (!class_exists('mmo_whoisonline'))
       // load online users
       $this->loadOnlineUsers();
       // load offline users if enabled
-      if (!$this->config('dontshowoffline'))
+      if (!$this->config->get('dontshowoffline', 'pmod'.$moduleID)) {
         $this->loadOfflineUsers();
+		$this->showOffline = true;
+	  }
     }
 
     /**
@@ -98,7 +102,7 @@ if (!class_exists('mmo_whoisonline'))
       }
 
       // output offline users
-      if ($offline_user_count > 0 && !$this->config('dontshowoffline'))
+      if ($offline_user_count > 0 && $this->showOffline)
       {
         $index = 0;
         foreach ($this->offline_users as $user_id => $user_row)
