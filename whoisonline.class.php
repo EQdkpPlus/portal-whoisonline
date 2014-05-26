@@ -28,9 +28,6 @@ if (!class_exists('mmo_whoisonline'))
 {
   class mmo_whoisonline extends gen_class
   {
-    /* list of dependencies */
-    public static $shortcuts = array('core', 'db', 'pdc', 'user', 'time', 'html', 'config', 'db');
-
     /* Array of online users */
     private $online_users = array();
 
