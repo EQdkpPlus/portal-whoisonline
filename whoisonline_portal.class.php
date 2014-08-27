@@ -49,6 +49,8 @@ class whoisonline_portal extends portal_generic {
 		'defaultposition'	=> 'left2',
 		'defaultnumber'		=> '2',
 	);
+	
+	protected static $apiLevel = 20;
 
 	public function output() {
 		include_once($this->root_path.'portal/whoisonline/whoisonline.class.php');
