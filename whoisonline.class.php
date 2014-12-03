@@ -57,7 +57,7 @@ if (!class_exists('mmo_whoisonline'))
     public function __construct($moduleID){
 
       // limit of users
-      $this->limit = ($this->config->get('limit', 'pmod_'.$moduleID) && $this->config->get('limit', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit', 'pmod'.$moduleID) : 10;
+      $this->limit = ($this->config->get('limit', 'pmod_'.$moduleID) && $this->config->get('limit', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit', 'pmod_'.$moduleID) : 10;
 
       // get image path
       $this->image_path = $this->server_path.'images/glyphs';
