@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	Who is online Portal Module
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -19,22 +19,26 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-// Title
-$lang['whoisonline']				= 'User Online';
-$lang['whoisonline_name']			= 'User Online';
-$lang['whoisonline_desc']			= 'Show online/offline users';
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: portal/whoisonline/language/english.php
+//Source-Language: german
 
-//  Settings
-$lang['whoisonline_f_limit']			= 'Max number of users.';
-$lang['whoisonline_f_dontshowoffline']= 'Dont show offline User.';
-
-// Portal Modul
-$lang['wo_online']					= 'User Online';
-$lang['wo_last_online']				= 'Last online: ';
-$lang['wo_date_format']				= 'd. M Y H:i:s';  // DD. MMM YYYY HH:mm:ss
+$lang = array( 
+	"whoisonline" => 'User Online',
+	"whoisonline_name" => 'User Online',
+	"whoisonline_desc" => 'Show online/offline users',
+	"whoisonline_f_limit" => 'Max number of users.',
+	"whoisonline_f_dontshowoffline" => 'Dont show offline User.',
+	"wo_online" => 'User Online',
+	"wo_last_online" => 'Last online: ',
+	"wo_date_format" => 'd. M Y H:i:s',
+	
+);
 
 ?>
