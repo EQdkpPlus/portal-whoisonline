@@ -86,7 +86,7 @@ if (!class_exists('mmo_whoisonline')){
 			$offline_user_count = min($this->limit - $online_user_count, count($this->offline_users));
 
 			// table header
-			$output = '<div class="table colorswitch hoverrows">';
+			$output = '<div class="table fullwidth colorswitch hoverrows">';
 
 			// output online users
 			foreach ($this->online_users as $user_row){
