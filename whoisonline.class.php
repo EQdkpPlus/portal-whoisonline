@@ -147,14 +147,14 @@ if (!class_exists('mmo_whoisonline')){
 				$this->online_users = array();
 
 				// get all online users
-				$sql = "SELECT u.user_id, u.username, u.user_lastvisit
+				$sql = "SELECT u.user_id, u.username, s.session_current
 					FROM __sessions s
 					LEFT JOIN __users u
 					ON u.user_id = s.session_user_id
-					WHERE u.user_active = '1'
+					WHERE u.user_active = '1' AND s.session_current > ?
 					GROUP BY u.username
-					ORDER BY u.user_lastvisit DESC";
-				$objResult = $this->db->prepare($sql)->limit($this->limit)->execute();
+					ORDER BY s.session_current DESC";
+				$objResult = $this->db->prepare($sql)->limit($this->limit)->execute($this->time->time-600);
 				if ($objResult){
 					// fetch users
 					while ($objResult->fetchAssoc()){
@@ -163,7 +163,7 @@ if (!class_exists('mmo_whoisonline')){
 							$this->online_users[$objResult->user_id] = array(
 								'user_id'   => $objResult->user_id,
 								'username'  => $objResult->username,
-								'lastvisit' => $objResult->user_lastvisit,
+								'lastvisit' => $objResult->session_current,
 							);
 						}
 					}
