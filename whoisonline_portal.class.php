@@ -36,17 +36,31 @@ class whoisonline_portal extends portal_generic {
 		'lang_prefix'	=> 'whoisonline_'
 	);
 	protected static $positions = array('left1', 'left2', 'right');
-	protected $settings	= array(
-		'limit'     => array(
-			'type'		=> 'text',
-			'size'		=> '2',
-		),
-		'dontshowoffline'     => array(
-			'type'		=> 'radio',
-			'size'		=> false,
-			'options'	=> false,
-		)
-	);
+	
+	public function get_settings($state){
+		return array(
+			'limit_online'     => array(
+				'type'		=> 'spinner',
+				'size'		=> '2',
+				'default'	=> 0,
+			),		
+			'limit_offline'     => array(
+				'type'		=> 'spinner',
+				'size'		=> '2',
+				'default'	=> 0,
+			),
+			'limit_total'     => array(
+				'type'		=> 'spinner',
+				'size'		=> '2',
+				'default'	=> 0,
+			),
+			'view' => array(
+				'type'	=> 'dropdown',
+				'options' => $this->user->lang('wo_type_options'),	
+			)
+		);
+	}
+	
 	protected static $install	= array(
 		'autoenable'		=> '0',
 		'defaultposition'	=> 'left2',
@@ -62,8 +76,7 @@ class whoisonline_portal extends portal_generic {
 	}
 
 	public static function reset() {
-		register('pdc')->del('portal.module.whoisonline.online'); 
-		register('pdc')->del('portal.module.whoisonline.offline');
+		register('pdc')->del('portal.module.whoisonline'); 
 	}
 }
 ?>

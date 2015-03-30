@@ -29,12 +29,15 @@ $lang['whoisonline_name']			= 'User Online';
 $lang['whoisonline_desc']			= 'Anzeige für Online/Offline Benutzer';
 
 //  Settings
-$lang['whoisonline_f_limit']			= 'Maximale Anzahl an Benutzern.';
-$lang['whoisonline_f_dontshowoffline']= 'Offline User nicht anzeigen.';
+$lang['whoisonline_f_limit_total']	= 'Maximale Anzahl an angezeigten Benutzern';
+$lang['whoisonline_f_help_limit_total']	= 'Wird die maximale Anzahl von Online-Benutzern nicht erreicht, wird mit Offline-Benutzer aufgefüllt, bis deren maximale Anzahl erreicht ist.';
+$lang['whoisonline_f_limit_online']	= 'Maximale Anzahl an angezeigten Online-Benutzern';
+$lang['whoisonline_f_help_limit_online']	= 'Trage 0 ein, um alle Online-Benutzer anzuzeigen';
+$lang['whoisonline_f_limit_offline']	= 'Maximale Anzahl an angezeigten Offline-Benutzern';
+$lang['whoisonline_f_help_limit_offline']	= 'Trage 0 ein, um keine Offline-Benutzer anzuzeigen';
 
 // Portal Modul
-$lang['wo_online']					= 'User Online';
-$lang['wo_last_online']				= 'Zuletzt online: ';
-$lang['wo_date_format']				= 'd.m.Y H:i:s';  // DD.MM.YYYY HH:mm:ss
-
+$lang['wo_last_activity']			= 'Letzte Aktivität';
+$lang['wo_type_options']			= array('Liste', 'Nur Avatare');
+$lang['whoisonline_f_view']			= 'Darstellung';
 ?>

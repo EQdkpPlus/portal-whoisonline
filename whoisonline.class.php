@@ -28,25 +28,18 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 if (!class_exists('mmo_whoisonline')){
 	class mmo_whoisonline extends gen_class{
-		/* Array of online users */
-		private $online_users = array();
-
-		/* Array of offline users */
-		private $offline_users = array();
+		/* Array of users */
+		private $users = array();
 
 		/* Limit of users to display */
-		private $limit;
+		private $limit_total;
+		private $limit_online;
+		private $limit_offline;
 
 		/* Cache data 5 minutes */
 		private $cachetime = 300;
-
-		/* image path */
-		private $image_path;
-
-		/* is admin to manage? */
-		private $is_admin;
-	
-		private $showOffline = false;
+		
+		private $view = 0;
 
 		/**
 		* Constructor
@@ -54,23 +47,14 @@ if (!class_exists('mmo_whoisonline')){
 		* @param  $id  integer ModuleID
 		*/
 		public function __construct($moduleID){
+			$this->limit_total = ($this->config->get('limit_total', 'pmod_'.$moduleID) && $this->config->get('limit_total', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_total', 'pmod_'.$moduleID) : 0;
+			$this->limit_offline = ($this->config->get('limit_offline', 'pmod_'.$moduleID) && $this->config->get('limit_offline', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_offline', 'pmod_'.$moduleID) : 0;
+			$this->limit_online = ($this->config->get('limit_online', 'pmod_'.$moduleID) && $this->config->get('limit_online', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_online', 'pmod_'.$moduleID) : 0;
 
-			// limit of users
-			$this->limit = ($this->config->get('limit', 'pmod_'.$moduleID) && $this->config->get('limit', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit', 'pmod_'.$moduleID) : 10;
+			$this->view = ($this->config->get('view', 'pmod_'.$moduleID) && $this->config->get('view', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('view', 'pmod_'.$moduleID) : 0;
 
-			// get image path
-			$this->image_path = $this->server_path.'images/glyphs';
-
-			// get is admin
-			$this->is_admin = ($this->user->is_signedin() && $this->user->check_auth('a_users_man', false)) ? true : false;
-
-			// load online users
-			$this->loadOnlineUsers();
-			// load offline users if enabled
-			if (!$this->config->get('dontshowoffline', 'pmod_'.$moduleID)) {
-				$this->loadOfflineUsers();
-				$this->showOffline = true;
-			}
+			// load users
+			$this->loadUsers();
 		}
 
 		/**
@@ -80,37 +64,67 @@ if (!class_exists('mmo_whoisonline')){
 		* @return string
 		*/
 		public function getPortalOutput(){
-
-			// get number of online and offline users to display
-			$online_user_count = count($this->online_users);
-			$offline_user_count = min($this->limit - $online_user_count, count($this->offline_users));
+			//Limit total users
+			if($this->limit_total > 0 && count($this->users) > $this->limit_total){
+				$this->users = array_slice($this->users, 0, $this->limit_total);
+			}
+			
+			$this->tpl->add_css(".user-avatar-grey > div {
+				 opacity: 0.3;
+    			 filter: alpha(opacity=30); /* msie */
+			}");
 
 			// table header
-			$output = '<div class="table fullwidth colorswitch hoverrows">';
-
-			// output online users
-			foreach ($this->online_users as $user_row){
-				// show as online
-				$output .= '<div class="tr">
-					<div class="td center"><i class="eqdkp-icon-online" style="font-size: 10px;"></i></div>
-					<div class="td coretip" data-coretip="'.$this->user->lang('wo_online').'">'.$this->getUsername($user_row).'</div>
-					</div>';
+			if($this->view === 0){
+				$output = '<div class="table fullwidth colorswitch hoverrows">';
+			} else {
+				$output = '<div class="table fullwidth">';
 			}
 
-			// output offline users
-			if ($offline_user_count > 0 && $this->showOffline){
-				$index = 0;
-				foreach ($this->offline_users as $user_id => $user_row){
-					// end loop if max offline users are reached
-					if ($index++ >= $offline_user_count)
-						break;
-
-					// show as offline
+			// output online users
+			$intCountOnline = 0;
+			foreach ($this->users as $userid => $user_row){
+				if($user_row['status'] != "online") continue;
+				if($this->limit_online > 0 && $intCountOnline >= $this->limit_online) break;
+				
+				
+				$useravatar = $this->pdh->geth('user', 'avatarimglink', array($userid));					
+				
+				// show as online
+				if($this->view === 0){
 					$output .= '<div class="tr">
-						<div class="td center"><i class="eqdkp-icon-offline" style="font-size: 10px;"></i></div>
-						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_online').'<br/>'.$this->time->date($this->user->lang('wo_date_format'), $user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
+						<div class="td center">
+							<div class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+						</div>
+						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
+				
+				} else {
+					$output .= '<div class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
+				
+				$intCountOnline++;
+			}
+
+			foreach ($this->users as $userid => $user_row){
+				if($user_row['status'] != "offline") continue;
+				if($this->limit_offline > 0 && $intCountOnline >= $this->limit_offline) break;
+
+				$useravatar = $this->pdh->geth('user', 'avatarimglink', array($userid));					
+				
+				// show as online
+				if($this->view === 0){
+					$output .= '<div class="tr">
+						<div class="td center">
+							<div class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+						</div>
+						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
+						</div>';
+				} else {
+					$output .= '<div class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+				}
+				
+				$intCountOnline++;
 			}
 
 			// table end
@@ -138,81 +152,67 @@ if (!class_exists('mmo_whoisonline')){
 		* loadOnlineUsers
 		* get list of online users
 		*/
-		private function loadOnlineUsers(){
-
+		private function loadUsers(){
 			// try to get online users from cache
-			$this->online_users = $this->pdc->get('portal.module.whoisonline.online', false, true);
-			if (!$this->online_users){
+			$this->users = $this->pdc->get('portal.module.whoisonline', false, true);
+			if (!$this->users){
 				// empty array
-				$this->online_users = array();
+				$this->users = array();
 
 				// get all online users
 				$sql = "SELECT u.user_id, u.username, s.session_current
 					FROM __sessions s
 					LEFT JOIN __users u
 					ON u.user_id = s.session_user_id
-					WHERE u.user_active = '1' AND s.session_current > ?
+					WHERE u.user_active = '1'
 					GROUP BY u.username
 					ORDER BY s.session_current DESC";
-				$objResult = $this->db->prepare($sql)->limit($this->limit)->execute($this->time->time-600);
+				$objResult = $this->db->prepare($sql)->execute();
 				if ($objResult){
 					// fetch users
 					while ($objResult->fetchAssoc()){
 						// for some unknown reason, there is sometimes an empty user id
 						if ($objResult->user_id != ""){
-							$this->online_users[$objResult->user_id] = array(
+							$this->users[$objResult->user_id] = array(
 								'user_id'   => $objResult->user_id,
 								'username'  => $objResult->username,
 								'lastvisit' => $objResult->session_current,
+								'status'	=> ((int)$objResult->session_current > $this->time->time-600) ? 'online' : 'offline',
 							);
 						}
 					}
-					// cache result
-					$this->pdc->put('portal.module.whoisonline.online', $this->online_users, $this->cachetime, false, true);
 				}
-			}
-		}
+				
+				// get offline users
+				if($this->limit_offline > 0){
+					$sql = "SELECT user_id, username, user_lastvisit
+						FROM __users
+						WHERE user_active = '1'
+						GROUP BY username
+						ORDER BY user_lastvisit DESC";
+					$objResult = $this->db->prepare($sql)->limit(2 * ($this->limit_total+$this->limit_offline))->execute();
 
-		/**
-		* loadOfflineUsers
-		* get list of offline users
-		*/
-		private function loadOfflineUsers(){
+					if ($objResult){
+						// fetch users
+						while ($objResult->fetchAssoc()){
+							if(!isset($this->users[$objResult->user_id])) {
+								$this->users[$objResult->user_id] = array(
+										'user_id'   => $objResult->user_id,
+										'username'  => $objResult->username,
+										'lastvisit' => $objResult->user_lastvisit,
+										'status'	=> 'offline',
+								);
+							}
+						}
 
-			// try to get online users from cache
-			$this->offline_users = $this->pdc->get('portal.module.whoisonline.offline', false, true);
-			if ($this->offline_users === null){
-				// reset array
-				$this->offline_users = array();
-
-				// get last active users (2x limit for ensuring enough users)
-				$sql = "SELECT user_id, username, user_lastvisit
-					FROM __users
-					WHERE user_active = '1'
-					GROUP BY username
-					ORDER BY user_lastvisit DESC";
-
-				$objResult = $this->db->prepare($sql)->limit(2 * $this->limit)->execute();
-
-				if ($objResult){
-					// fetch users
-					while ($objResult->fetchAssoc()){
-						$this->offline_users[$objResult->user_id] = array(
-							'user_id'   => $objResult->user_id,
-							'username'  => $objResult->username,
-							'lastvisit' => $objResult->user_lastvisit,
-						);
 					}
-
-					// build difference from online to offline users
-					if (is_array($this->online_users))
-						$this->offline_users = array_diff_key($this->offline_users, $this->online_users);
-
-					// cache result
-					$this->pdc->put('portal.module.whoisonline.offline', $this->offline_users, $this->cachetime, false, true);
 				}
+								
+				// cache result
+				$this->pdc->put('portal.module.whoisonline', $this->users, $this->cachetime, false, true);
 			}
 		}
+
 	}
 }
 ?>

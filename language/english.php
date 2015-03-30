@@ -33,12 +33,19 @@ $lang = array(
 	"whoisonline" => 'User Online',
 	"whoisonline_name" => 'User Online',
 	"whoisonline_desc" => 'Show online/offline users',
-	"whoisonline_f_limit" => 'Max number of users.',
-	"whoisonline_f_dontshowoffline" => 'Dont show offline User.',
-	"wo_online" => 'User Online',
-	"wo_last_online" => 'Last online: ',
-	"wo_date_format" => 'd. M Y H:i:s',
-	
 );
+
+//  Settings
+$lang['whoisonline_f_limit_total']	= 'Maximium number of shown users';
+$lang['whoisonline_f_help_limit_total']	= 'No more user than this number will be displayed.';
+$lang['whoisonline_f_limit_online']	= 'Maximum number of shown online user';
+$lang['whoisonline_f_help_limit_online']	= 'Insert 0 to show all online user';
+$lang['whoisonline_f_limit_offline']	= 'Maximum number of shown offline user';
+$lang['whoisonline_f_help_limit_offline']	= 'Insert 0 to not display offline user';
+
+// Portal Modul
+$lang['wo_last_activity']			= 'Last activity';
+$lang['wo_type_options']			= array('List', 'Avatars only');
+$lang['whoisonline_f_view']			= 'View';
 
 ?>
