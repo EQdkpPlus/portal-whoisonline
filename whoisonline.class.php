@@ -92,7 +92,7 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr">
+					$output .= '<div class="tr" data-user-status="online">
 						<div class="td center">
 							<div class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
@@ -100,7 +100,7 @@ if (!class_exists('mmo_whoisonline')){
 						</div>';
 				
 				} else {
-					$output .= '<div class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
 				
 				$intCountOnline++;
@@ -114,14 +114,14 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr">
+					$output .= '<div class="tr" data-user-status="offline">
 						<div class="td center">
 							<div class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				} else {
-					$output .= '<div class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
 				
 				$intCountOnline++;
