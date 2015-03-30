@@ -28,7 +28,7 @@ class whoisonline_portal extends portal_generic {
 	protected static $path		= 'whoisonline';
 	protected static $data		= array(
 		'name'			=> 'Online Module',
-		'version'		=> '0.2.1',
+		'version'		=> '0.2.3',
 		'author'		=> 'Aderyn',
 		'icon'			=> 'fa-globe',
 		'contact'		=> 'Aderyn@gmx.net',
