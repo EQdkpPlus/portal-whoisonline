@@ -106,9 +106,10 @@ if (!class_exists('mmo_whoisonline')){
 				$intCountOnline++;
 			}
 
+			$intCountOffline = 0;
 			foreach ($this->users as $userid => $user_row){
 				if($user_row['status'] != "offline") continue;
-				if($this->limit_offline > 0 && $intCountOnline >= $this->limit_offline) break;
+				if($this->limit_offline > 0 && $intCountOffline >= $this->limit_offline) break;
 
 				$useravatar = $this->pdh->geth('user', 'avatarimglink', array($userid));					
 				
@@ -124,7 +125,7 @@ if (!class_exists('mmo_whoisonline')){
 					$output .= '<div data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
 				
-				$intCountOnline++;
+				$intCountOffline++;
 			}
 
 			// table end
