@@ -30,14 +30,17 @@ if (!class_exists('mmo_whoisonline')){
 	class mmo_whoisonline extends gen_class{
 		/* Array of users */
 		private $users = array();
+		private $guests = array();
 
 		/* Limit of users to display */
 		private $limit_total;
 		private $limit_online;
 		private $limit_offline;
+		
+		private $show_guests = false;
 
-		/* Cache data 5 minutes */
-		private $cachetime = 300;
+		/* Cache data 2 minutes */
+		private $cachetime = 120;
 		
 		private $view = 0;
 
@@ -50,7 +53,8 @@ if (!class_exists('mmo_whoisonline')){
 			$this->limit_total = ($this->config->get('limit_total', 'pmod_'.$moduleID) && $this->config->get('limit_total', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_total', 'pmod_'.$moduleID) : 0;
 			$this->limit_offline = ($this->config->get('limit_offline', 'pmod_'.$moduleID) && $this->config->get('limit_offline', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_offline', 'pmod_'.$moduleID) : 0;
 			$this->limit_online = ($this->config->get('limit_online', 'pmod_'.$moduleID) && $this->config->get('limit_online', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('limit_online', 'pmod_'.$moduleID) : 0;
-
+			$this->show_guests = ($this->config->get('show_guests', 'pmod_'.$moduleID) && $this->config->get('show_guests', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('show_guests', 'pmod_'.$moduleID) : 0;
+			
 			$this->view = ($this->config->get('view', 'pmod_'.$moduleID) && $this->config->get('view', 'pmod_'.$moduleID) != '') ? (int)$this->config->get('view', 'pmod_'.$moduleID) : 0;
 
 			// load users
@@ -100,7 +104,7 @@ if (!class_exists('mmo_whoisonline')){
 						</div>';
 				
 				} else {
-					$output .= '<div data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
 				
 				$intCountOnline++;
@@ -109,7 +113,7 @@ if (!class_exists('mmo_whoisonline')){
 			$intCountOffline = 0;
 			foreach ($this->users as $userid => $user_row){
 				if($user_row['status'] != "offline") continue;
-				if($this->limit_offline > 0 && $intCountOffline >= $this->limit_offline) break;
+				if(($this->limit_offline == 0) || ($this->limit_offline > 0 && $intCountOffline >= $this->limit_offline)) break;
 
 				$useravatar = $this->pdh->geth('user', 'avatarimglink', array($userid));					
 				
@@ -122,14 +126,17 @@ if (!class_exists('mmo_whoisonline')){
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				} else {
-					$output .= '<div data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
 				}
 				
 				$intCountOffline++;
 			}
-
+			
 			// table end
 			$output .= '</div>';
+			if($this->show_guests){
+				$output .= '<div class="table fullwidth"><div>... '.sprintf($this->user->lang('wo_and_guests'), count($this->guests)).'</div></div>';
+			}
 
 			return $output;
 		}
@@ -155,31 +162,36 @@ if (!class_exists('mmo_whoisonline')){
 		*/
 		private function loadUsers(){
 			// try to get online users from cache
-			$this->users = $this->pdc->get('portal.module.whoisonline', false, true);
+			$this->users = $this->pdc->get('portal.module.whoisonline.users', false, true);
+			$this->guests = $this->pdc->get('portal.module.whoisonline.guests', false, true);
 			if (!$this->users){
 				// empty array
 				$this->users = array();
-
+				$this->guests = array();
+				
 				// get all online users
-				$sql = "SELECT u.user_id, u.username, s.session_current
+				$sql = "SELECT s.*
 					FROM __sessions s
-					LEFT JOIN __users u
-					ON u.user_id = s.session_user_id
-					WHERE u.user_active = '1'
-					GROUP BY u.username
 					ORDER BY s.session_current DESC";
 				$objResult = $this->db->prepare($sql)->execute();
 				if ($objResult){
 					// fetch users
 					while ($objResult->fetchAssoc()){
 						// for some unknown reason, there is sometimes an empty user id
-						if ($objResult->user_id != ""){
-							$this->users[$objResult->user_id] = array(
-								'user_id'   => $objResult->user_id,
-								'username'  => $objResult->username,
-								'lastvisit' => $objResult->session_current,
-								'status'	=> ((int)$objResult->session_current > $this->time->time-600) ? 'online' : 'offline',
-							);
+						if ($objResult->session_user_id > 0){
+							if(!isset($this->users[$objResult->session_user_id])){
+								$this->users[$objResult->session_user_id] = array(
+									'user_id'   => $objResult->session_user_id,
+									'lastvisit' => $objResult->session_current,
+									'status'	=> ((int)$objResult->session_current > ($this->time->time-600)) ? 'online' : 'offline',
+								);
+							}
+						} else {
+							if(((int)$objResult->session_current > ($this->time->time-600))){
+								if(!isset($this->guests[$objResult->session_ip])){
+									$this->guests[$objResult->session_ip] = $objResult->session_current;
+								}
+							}
 						}
 					}
 				}
@@ -210,7 +222,8 @@ if (!class_exists('mmo_whoisonline')){
 				}
 								
 				// cache result
-				$this->pdc->put('portal.module.whoisonline', $this->users, $this->cachetime, false, true);
+				$this->pdc->put('portal.module.whoisonline.users', $this->users, $this->cachetime, false, true);
+				$this->pdc->put('portal.module.whoisonline.guests', $this->guests, $this->cachetime, false, true);
 			}
 		}
 

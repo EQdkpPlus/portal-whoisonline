@@ -57,7 +57,10 @@ class whoisonline_portal extends portal_generic {
 			'view' => array(
 				'type'	=> 'dropdown',
 				'options' => $this->user->lang('wo_type_options'),	
-			)
+			),
+			'show_guests' => array(
+				'type' => 'radio',	
+			),
 		);
 	}
 	
@@ -76,7 +79,8 @@ class whoisonline_portal extends portal_generic {
 	}
 
 	public static function reset() {
-		register('pdc')->del('portal.module.whoisonline'); 
+		register('pdc')->del('portal.module.whoisonline.users');
+		register('pdc')->del('portal.module.whoisonline.guests');
 	}
 }
 ?>

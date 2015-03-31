@@ -42,10 +42,10 @@ $lang['whoisonline_f_limit_online']	= 'Maximum number of shown online user';
 $lang['whoisonline_f_help_limit_online']	= 'Insert 0 to show all online user';
 $lang['whoisonline_f_limit_offline']	= 'Maximum number of shown offline user';
 $lang['whoisonline_f_help_limit_offline']	= 'Insert 0 to not display offline user';
-
+$lang['whoisonline_f_show_guests']	= 'Show Guests';
 // Portal Modul
 $lang['wo_last_activity']			= 'Last activity';
 $lang['wo_type_options']			= array('List', 'Avatars only');
 $lang['whoisonline_f_view']			= 'View';
-
+$lang['wo_and_guests']				= 'and %d Visitors';
 ?>

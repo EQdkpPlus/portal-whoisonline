@@ -35,9 +35,10 @@ $lang['whoisonline_f_limit_online']	= 'Maximale Anzahl an angezeigten Online-Ben
 $lang['whoisonline_f_help_limit_online']	= 'Trage 0 ein, um alle Online-Benutzer anzuzeigen';
 $lang['whoisonline_f_limit_offline']	= 'Maximale Anzahl an angezeigten Offline-Benutzern';
 $lang['whoisonline_f_help_limit_offline']	= 'Trage 0 ein, um keine Offline-Benutzer anzuzeigen';
-
+$lang['whoisonline_f_show_guests']	= 'Gäste anzeigen';
 // Portal Modul
 $lang['wo_last_activity']			= 'Letzte Aktivität';
 $lang['wo_type_options']			= array('Liste', 'Nur Avatare');
 $lang['whoisonline_f_view']			= 'Darstellung';
+$lang['wo_and_guests']				= 'und %d Besucher';
 ?>
