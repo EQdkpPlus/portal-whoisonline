@@ -153,7 +153,8 @@ if (!class_exists('mmo_whoisonline')){
 			if (!is_array($user_row))
 				return '';
 		
-			return '<a href="'.register('routing')->build('user', $user_row['username'], 'u'.$user_row['user_id']).'">'.$user_row['username'].'</a>';
+			$username = $this->pdh->get('user', 'name', array($user_row['user_id']));
+			return '<a href="'.register('routing')->build('user', $username, 'u'.$user_row['user_id']).'">'.$username.'</a>';
 		}
 
 		/**
@@ -169,6 +170,9 @@ if (!class_exists('mmo_whoisonline')){
 				$this->users = array();
 				$this->guests = array();
 				
+				include_once($this->root_path.'core/admin_functions.class.php');
+				$admin_functions = register('admin_functions');
+				
 				// get all online users
 				$sql = "SELECT s.*
 					FROM __sessions s
@@ -177,6 +181,11 @@ if (!class_exists('mmo_whoisonline')){
 				if ($objResult){
 					// fetch users
 					while ($objResult->fetchAssoc()){
+						//Check if Bot
+						if($admin_functions->resolve_bots($objResult->session_browser)){
+							continue;
+						}
+						
 						// for some unknown reason, there is sometimes an empty user id
 						if ($objResult->session_user_id > 0){
 							if(!isset($this->users[$objResult->session_user_id])){
