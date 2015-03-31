@@ -70,7 +70,7 @@ if (!class_exists('mmo_whoisonline')){
 		public function getPortalOutput(){
 			//Limit total users
 			if($this->limit_total > 0 && count($this->users) > $this->limit_total){
-				$this->users = array_slice($this->users, 0, $this->limit_total);
+				$this->users = array_slice($this->users, 0, $this->limit_total, true);
 			}
 			
 			$this->tpl->add_css(".user-avatar-grey > div {
@@ -84,7 +84,7 @@ if (!class_exists('mmo_whoisonline')){
 			} else {
 				$output = '<div class="table fullwidth">';
 			}
-
+			
 			// output online users
 			$intCountOnline = 0;
 			foreach ($this->users as $userid => $user_row){
@@ -187,7 +187,7 @@ if (!class_exists('mmo_whoisonline')){
 						}
 						
 						// for some unknown reason, there is sometimes an empty user id
-						if ($objResult->session_user_id > 0){
+						if ((int)$objResult->session_user_id > 0){
 							if(!isset($this->users[$objResult->session_user_id])){
 								$this->users[$objResult->session_user_id] = array(
 									'user_id'   => $objResult->session_user_id,
