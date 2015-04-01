@@ -170,9 +170,6 @@ if (!class_exists('mmo_whoisonline')){
 				$this->users = array();
 				$this->guests = array();
 				
-				include_once($this->root_path.'core/admin_functions.class.php');
-				$admin_functions = register('admin_functions');
-				
 				// get all online users
 				$sql = "SELECT s.*
 					FROM __sessions s
@@ -182,7 +179,7 @@ if (!class_exists('mmo_whoisonline')){
 					// fetch users
 					while ($objResult->fetchAssoc()){
 						//Check if Bot
-						if($admin_functions->resolve_bots($objResult->session_browser)){
+						if($this->env->is_bot($objResult->session_browser)){
 							continue;
 						}
 						
