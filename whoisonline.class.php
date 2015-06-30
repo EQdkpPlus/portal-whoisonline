@@ -104,7 +104,7 @@ if (!class_exists('mmo_whoisonline')){
 						</div>';
 				
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOnline++;
@@ -126,7 +126,7 @@ if (!class_exists('mmo_whoisonline')){
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$useravatar.'</div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOffline++;
@@ -154,7 +154,18 @@ if (!class_exists('mmo_whoisonline')){
 				return '';
 		
 			$username = $this->pdh->get('user', 'name', array($user_row['user_id']));
-			return '<a href="'.register('routing')->build('user', $username, 'u'.$user_row['user_id']).'">'.$username.'</a>';
+			return '<a href="'.$this->getUserlink($user_row['user_id']).'">'.$username.'</a>';
+		}
+		
+		/**
+		 * Returns Link for User
+		 * 
+		 * @param integer $user_id
+		 * @return string
+		 */
+		private function getUserlink($user_id){
+			$username = $this->pdh->get('user', 'name', array($user_id));
+			return register('routing')->build('user', $username, 'u'.$user_id);
 		}
 
 		/**
