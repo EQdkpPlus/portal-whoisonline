@@ -73,7 +73,7 @@ if (!class_exists('mmo_whoisonline')){
 				$this->users = array_slice($this->users, 0, $this->limit_total, true);
 			}
 			
-			$this->tpl->add_css(".user-avatar-grey > div {
+			$this->tpl->add_css(".user-avatar-grey > a div {
 				 opacity: 0.3;
     			 filter: alpha(opacity=30); /* msie */
 			}");
