@@ -29,9 +29,9 @@ class whoisonline_portal extends portal_generic {
 	protected static $data		= array(
 		'name'			=> 'Online Module',
 		'version'		=> '0.3.1',
-		'author'		=> 'Aderyn',
+		'author'		=> 'GodMod',
 		'icon'			=> 'fa-globe',
-		'contact'		=> 'Aderyn@gmx.net',
+		'contact'		=> '',
 		'description'	=> 'Show online users',
 		'lang_prefix'	=> 'whoisonline_'
 	);

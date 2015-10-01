@@ -133,7 +133,7 @@ if (!class_exists('mmo_whoisonline')){
 			}
 			
 			// table end
-			$output .= '</div>';
+			$output .= '<div class="clear"></div></div>';
 			if($this->show_guests){
 				$output .= '<div class="table fullwidth"><div>... '.sprintf($this->user->lang('wo_and_guests'), count($this->guests)).'</div></div>';
 			}
