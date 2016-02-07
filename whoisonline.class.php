@@ -96,7 +96,7 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr" data-user-status="online">
+					$output .= '<div class="tr" data-user-status="online" data-user-id="'.$userid.'">
 						<div class="td center">
 							<div class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
@@ -104,7 +104,7 @@ if (!class_exists('mmo_whoisonline')){
 						</div>';
 				
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOnline++;
@@ -119,14 +119,14 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr" data-user-status="offline">
+					$output .= '<div class="tr" data-user-status="offline" data-user-id="'.$userid.'">
 						<div class="td center">
 							<div class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOffline++;
