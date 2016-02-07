@@ -3,7 +3,7 @@
  *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -48,5 +48,4 @@ $lang['wo_last_activity']			= 'Last activity';
 $lang['wo_type_options']			= array('List', 'Avatars only');
 $lang['whoisonline_f_view']			= 'View';
 $lang['wo_and_guests']				= 'and %d Visitors';
-$lang['wo_and_guests']				= 'No users and %d Visitors';
 ?>

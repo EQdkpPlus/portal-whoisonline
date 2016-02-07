@@ -3,7 +3,7 @@
  *	Package:	Who is online Portal Module
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -98,13 +98,13 @@ if (!class_exists('mmo_whoisonline')){
 				if($this->view === 0){
 					$output .= '<div class="tr" data-user-status="online">
 						<div class="td center">
-							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+							<div class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="online" class="user-avatar-small user-avatar-border floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOnline++;
@@ -121,12 +121,12 @@ if (!class_exists('mmo_whoisonline')){
 				if($this->view === 0){
 					$output .= '<div class="tr" data-user-status="offline">
 						<div class="td center">
-							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+							<div class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
 				} else {
-					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'" data-user-id="'.$userid.'">'.$useravatar.'</a></div>	';
+					$output .= '<div style="margin-bottom: 4px;" data-user-status="offline" class="user-avatar-small user-avatar-border user-avatar-grey floatLeft coretip" data-coretip="'.$this->pdh->get('user', 'name', array($userid)).'<br />'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'"><a href="'.$this->getUserlink($userid).'">'.$useravatar.'</a></div>	';
 				}
 				
 				$intCountOffline++;
@@ -135,11 +135,7 @@ if (!class_exists('mmo_whoisonline')){
 			// table end
 			$output .= '<div class="clear"></div></div>';
 			if($this->show_guests){
-				if(($intCountOffline + $intCountOnline) === 0){
-					$output .= '<div class="table fullwidth"><div>'.sprintf($this->user->lang('wo_guests'), count($this->guests)).'</div></div>';
-				} else {
-					$output .= '<div class="table fullwidth"><div>... '.sprintf($this->user->lang('wo_and_guests'), count($this->guests)).'</div></div>';
-				}
+				$output .= '<div class="table fullwidth"><div>... '.sprintf($this->user->lang('wo_and_guests'), count($this->guests)).'</div></div>';
 			}
 
 			return $output;

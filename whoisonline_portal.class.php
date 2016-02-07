@@ -3,7 +3,7 @@
  *	Package:	Who is online Portal Module
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -27,8 +27,8 @@ class whoisonline_portal extends portal_generic {
 
 	protected static $path		= 'whoisonline';
 	protected static $data		= array(
-		'name'			=> 'Who-is-online Module',
-		'version'		=> '0.3.3',
+		'name'			=> 'Online Module',
+		'version'		=> '0.3.1',
 		'author'		=> 'GodMod',
 		'icon'			=> 'fa-globe',
 		'contact'		=> '',
