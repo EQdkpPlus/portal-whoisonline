@@ -98,7 +98,7 @@ if (!class_exists('mmo_whoisonline')){
 				if($this->view === 0){
 					$output .= '<div class="tr" data-user-status="online">
 						<div class="td center">
-							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+							<div class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
@@ -121,7 +121,7 @@ if (!class_exists('mmo_whoisonline')){
 				if($this->view === 0){
 					$output .= '<div class="tr" data-user-status="offline">
 						<div class="td center">
-							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
+							<div class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
 						<div class="td coretip" data-coretip="'.$this->user->lang('wo_last_activity').': '.$this->time->nice_date($user_row['lastvisit']).'">'.$this->getUsername($user_row).'</div>
 						</div>';
@@ -158,7 +158,7 @@ if (!class_exists('mmo_whoisonline')){
 				return '';
 		
 			$username = $this->pdh->get('user', 'name', array($user_row['user_id']));
-			return '<a href="'.$this->getUserlink($user_row['user_id']).'">'.$username.'</a>';
+			return '<a href="'.$this->getUserlink($user_row['user_id']).'" data-user-id="'.$user_row['user_id'].'">'.$username.'</a>';
 		}
 		
 		/**
