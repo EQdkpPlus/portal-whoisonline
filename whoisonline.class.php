@@ -96,7 +96,7 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr" data-user-status="online">
+					$output .= '<div class="tr" data-user-status="online" data-user-id="'.$userid.'">
 						<div class="td center">
 							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
@@ -119,7 +119,7 @@ if (!class_exists('mmo_whoisonline')){
 				
 				// show as online
 				if($this->view === 0){
-					$output .= '<div class="tr" data-user-status="offline">
+					$output .= '<div class="tr" data-user-status="offline" data-user-id="'.$userid.'">
 						<div class="td center">
 							<div data-user-id="'.$userid.'" class="user-avatar-small user-avatar-border user-avatar-grey" title="'.$this->pdh->get('user', 'name', array($userid)).'">'.$useravatar.'</div>	
 						</div>
